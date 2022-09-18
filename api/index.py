@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
- 
+from os.path import join
  
 class handler(BaseHTTPRequestHandler):
  
@@ -7,5 +7,6 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
-        self.wfile.write("test python api".encode())
+        with open(join("data","404.html"),"r") as h:
+            self.wfile.write(h.encode())
         return
