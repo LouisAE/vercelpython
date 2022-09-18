@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler
-from os.path import join
+from os.path import join,dirname,abspath
+dirs = dirname(abspath(__file__))
  
 class handler(BaseHTTPRequestHandler):
  
@@ -7,6 +8,6 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
-        with open(join("data","404.html"),"r") as h:
+        with open(dirs + "../data/404.html"),"r") as h:
             self.wfile.write(h.encode())
         return
