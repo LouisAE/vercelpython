@@ -8,6 +8,6 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        with open(dirs + "../data/404.html"),"r") as h:
+        with open(dirs + "../data/404.html","r") as h:
             self.wfile.write(h.encode())
         return
