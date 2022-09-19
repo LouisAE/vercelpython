@@ -28,4 +28,9 @@ class handler(BaseHTTPRequestHandler):
             self.send_header('Content-Length',rhead['Content-Length'])
             self.end_headers()
             self.wfile.write(dnsres.content)
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        with open(dirs + "/../data/404.html","r",encoding="utf-8") as h:
+            self.wfile.write(h.read().encode())
         return
