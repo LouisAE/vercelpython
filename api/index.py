@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler,HTTPServer
-from requests import get
+from urllib.request import urlopen,Request
 from os.path import join,dirname,abspath
 import json
 import dns.message
@@ -16,10 +16,10 @@ class handler(BaseHTTPRequestHandler):
                 self.wfile.write(h.read().encode())
             return
         else:
-            dnsres = get("https://1.0.0.1/dns-query"+self.path[1:],
-                         headers={"Content-type": "application/dns-message"})
-            if dnsres.status_code != 200:
-                self.send_response_only(dnsres.status_code)
+            dnsres = urlopen(Request("https://1.0.0.1/dns-query"+self.path[1:],
+                         headers={"Content-type": "application/dns-message"}))
+            if dnsres.code != 200:
+                self.send_response_only(dnsres.code)
                 return
             rhead = dict(dnsres.headers)
             self.send_response(200)
@@ -27,10 +27,10 @@ class handler(BaseHTTPRequestHandler):
             self.send_header('Date',rhead['Date'])
             self.send_header('Content-Length',rhead['Content-Length'])
             self.end_headers()
-            self.wfile.write(dnsres.content)
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        with open(dirs + "/../data/404.html","r",encoding="utf-8") as h:
-            self.wfile.write(h.read().encode())
+            self.wfile.write(dnsres.read())
+        #self.send_response(200)
+        #self.send_header('Content-type', 'text/html')
+        #self.end_headers()
+        #with open(dirs + "/../data/404.html","r",encoding="utf-8") as h:
+            #self.wfile.write(h.read().encode())
         return
